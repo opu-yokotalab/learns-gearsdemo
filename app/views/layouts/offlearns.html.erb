@@ -72,8 +72,9 @@
 		};
 		
 		function showOutput(data){
-			dojo.byId('message').innerHTML += data[0].created_on;
-			dojo.byId('message').innerHTML += data[0].ent_module_id;
+			dojo.forEach(data, function(value){
+				dojo.byId('message').innerHTML += value.created_on + " " + value.ent_module_id + "<br/>";
+			});
 		}
 /*		
 		function load(){
