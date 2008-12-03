@@ -24,57 +24,48 @@
 		dojo.require("dojox.sql");
 		dojo.require("dojo.io.script")
 		
-		dojox.sql("create table if not exists message(name text, content text)");
+		//dojox.sql("drop table module_log");
+		dojox.sql("create table if not exists module_log(created_on date, ent_module_id text)");
 		
-		function save(){
-			//dojox.sql("insert into message VALUES (?,?)","yuki","tukareta-");
-			dojo.xhrGet({
-				url: "/javascripts/hogehoge.xml",
-				handleAs: 'xml',
-				load: function(response){
-					//alert(response);
-					//dojo.byId('message').innerHTML = response;
-					var root = response.documentElement;
-					//alert(root.childNodes.item(0).getAttribute("created_on"));
-					dojo.byId('message').innerHTML += root.childNodes.item(0).getAttribute("created_on");
-					dojo.byId('message').innerHTML += root.childNodes.item(0).firstChild.nodeValue
-					/*dojo.forEach(response, function(value){
-						dojo.byId('message').innerHTML += value;
-					});
-					//alert(response.documentElement.childNodes.item(0).created_on);
-					/*
-					var res = response.getElementByTagName("ModuleLog");
-					
-					var messageHTML = "<table>";
-					alert(messageHTML);
-					//for(var i=0;i<res.length;i++){
-					dojo.forEach(res, function(value){
-						messageHTML += "<tr><td>" + value.getAttribute("created_on") + "</td><td>" + value.item(0) + "</td><tr>";
-					});
-					messageHTML += "</table>";
-					
-					document.getElementById("message").innerHTML = messageHTML;
-					*/
-				}
-			});
-		}
-		
-		function load(){
+		function loadServer(){
 			dojo.io.script.get({
 				url: "http://192.168.31.128:3000/api/getLogJson/1/10",
-				handleAs: "application/json",
+				handleAs: "json",
 				preventCache: true,
 				callbackParamName: "callback",
 				load: function(data){
-					showOutput(data);
+					saveDB(data);
+					loadDB(data);
+					//showOutput(data);
 				}
 			});
 		};
 		
-		function showOutput(data){
+		function saveDB(data){
 			dojo.forEach(data, function(value){
-				dojo.byId('message').innerHTML += value.created_on + " " + value.ent_module_id + "<br/>";
+				dojox.sql("insert into module_log values(datetime(?,'unixepoch','localtime'), ?)",value.created_on, value.ent_module_id);
 			});
+			
+		}
+		
+		function addDB(){
+			dojox.sql("insert into module_log values(datetime('now','localtime'), ?)", '573');
+		}
+		function loadDB(){
+			var res = dojox.sql("select * from module_log order by created_on");
+			
+			var messageHTML = "<table>";
+			//for(var i=0;i<res.length;i++){
+			dojo.forEach(res, function(value){
+				messageHTML += "<tr><td>" + value.created_on + "</td><td>" + value.ent_module_id + "</td><tr>";
+			});
+			messageHTML += "</table>";
+			
+			dojo.byId("message").innerHTML = messageHTML;
+		}
+		function deleteDB(){
+			dojox.sql("drop table module_log");
+			dojo.byId("message").innerHTML = "";
 		}
 /*		
 		function load(){
