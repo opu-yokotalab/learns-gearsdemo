@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+	<title>Offlearns: <%= controller.action_name %></title>
+	<%= stylesheet_link_tag 'scaffold' %>
+	<script type="text/javascript" src="/javascripts/gears_init.js"></script>
+	<script type="text/javascript">
+		function init(){
+			if(window.google || google.gears){
+				alert("Gearsはインストールされています");
+				try{
+					google.gears.factory.create('beta.localserver','1.0');
+					alert("Gearsの利用が許可されました");
+				}
+				catch(e){
+					alert("Gearsの利用が拒否されました");
+				}
+			}
+			else{
+				alert("Gearsがインストールされていません");
+			}
+		}
+	</script>
+</head>
+<body onload="init()">
+
+<p style="color: green"><%= flash[:notice] %></p>
+
+<%= yield  %>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+<h1>Editing offlearn</h1>
+
+<% form_for(@offlearn) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :contents %><br />
+    <%= f.text_area :contents %>
+  </p>
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @offlearn %> |
+<%= link_to 'Back', offlearns_path %>

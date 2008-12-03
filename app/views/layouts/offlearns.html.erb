@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+	<title>Offlearns: <%= controller.action_name %></title>
+	<%= stylesheet_link_tag 'scaffold' %>
+	
+	<!-- Dojo基本ファイル -->
+	<script type="text/javascript" src="/dojo/dojo/dojo.js"></script>
+	<link rel="stylesheet" type="text/css" href="/dojo/dojo/resources/dojo.css"/>
+	
+	<!-- Dojo offlineファイル-->
+	<script type="text/javascript" src="/dojo/dojox/off/offline.js"></script>
+	<link rel="stylesheet" type="text/css" href="/dojo/dojox/off/resources/offline-widget.css"/>
+	
+	<script type="text/javascript">
+		dojox.off.ui.appName = "rireki";
+		
+		dojox.off.initialize();
+		
+		//dojox.sql
+		dojo.require("dojox.sql");
+		dojo.require("dojo.io.script")
+		
+		dojox.sql("create table if not exists message(name text, content text)");
+		
+		function save(){
+			//dojox.sql("insert into message VALUES (?,?)","yuki","tukareta-");
+			dojo.xhrGet({
+				url: "/javascripts/hogehoge.xml",
+				handleAs: 'xml',
+				load: function(response){
+					//alert(response);
+					//dojo.byId('message').innerHTML = response;
+					var root = response.documentElement;
+					//alert(root.childNodes.item(0).getAttribute("created_on"));
+					dojo.byId('message').innerHTML += root.childNodes.item(0).getAttribute("created_on");
+					dojo.byId('message').innerHTML += root.childNodes.item(0).firstChild.nodeValue
+					/*dojo.forEach(response, function(value){
+						dojo.byId('message').innerHTML += value;
+					});
+					//alert(response.documentElement.childNodes.item(0).created_on);
+					/*
+					var res = response.getElementByTagName("ModuleLog");
+					
+					var messageHTML = "<table>";
+					alert(messageHTML);
+					//for(var i=0;i<res.length;i++){
+					dojo.forEach(res, function(value){
+						messageHTML += "<tr><td>" + value.getAttribute("created_on") + "</td><td>" + value.item(0) + "</td><tr>";
+					});
+					messageHTML += "</table>";
+					
+					document.getElementById("message").innerHTML = messageHTML;
+					*/
+				}
+			});
+		}
+		
+		function load(){
+			dojo.io.script.get({
+				url: "http://192.168.31.128:3000/api/getLogJson/1/10",
+				handleAs: "application/json",
+				preventCache: true,
+				callbackParamName: "callback",
+				load: function(data){
+					showOutput(data);
+				}
+			});
+		};
+		
+		function showOutput(data){
+			dojo.byId('message').innerHTML += data[0].created_on;
+			dojo.byId('message').innerHTML += data[0].ent_module_id;
+		}
+/*		
+		function load(){
+			var res = dojox.sql("select * from message");
+			
+			var messageHTML = "<table>";
+			//for(var i=0;i<res.length;i++){
+			dojo.forEach(res, function(value){
+				messageHTML += "<tr><td>" + value.name + "</td><td>" + value.content + "</td><tr>";
+			});
+			messageHTML += "</table>";
+			
+			document.getElementById("message").innerHTML = messageHTML;
+		}
+*/		
+	</script>
+</head>
+<body>
+
+<p style="color: green"><%= flash[:notice] %></p>
+
+<%= yield  %>
+
+</body>
+</html>

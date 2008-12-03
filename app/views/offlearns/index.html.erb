@@ -1,0 +1,32 @@
+<!--
+<h1>Listing offlearns</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Contents</th>
+  </tr>
+
+<% for offlearn in @offlearns %>
+  <tr>
+    <td><%=h offlearn.name %></td>
+    <td><%=h offlearn.contents %></td>
+    <td><%= link_to 'Show', offlearn %></td>
+    <td><%= link_to 'Edit', edit_offlearn_path(offlearn) %></td>
+    <td><%= link_to 'Destroy', offlearn, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New offlearn', new_offlearn_path %>
+
+<br/>
+-->
+<button onclick="save()">保存</button>
+<button onclick="load()">読込</button>
+
+<br/>
+
+<div id="message"></div>
